@@ -112,7 +112,8 @@ def create_app(test_config=None):
         try:
             question.delete()
             return jsonify({
-                'success': True
+                'success': True,
+                'message': "Deletion was Successful!"
             }), 200
         except:
             abort(422)
@@ -154,10 +155,10 @@ def create_app(test_config=None):
                                     answer=answer,
                                     category=category,
                                     difficulty=difficulty)
-
                 question.insert()
                 return jsonify({
-                    'success': True
+                    'success': True,
+                    'message': "Insertion was Successful!"
                 }), 200
             except:
                 abort(422)
@@ -238,24 +239,24 @@ def create_app(test_config=None):
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
-        "success": False, 
-        "error": 404,
-        "message": "resource not found"
+            "success": False,
+            "error": 404,
+            "message": "resource not found"
         }), 404
 
     @app.errorhandler(422)
     def unprocessable(error):
         return jsonify({
-        "success": False, 
-        "error": 422,
-        "message": "unprocessable"
+            "success": False,
+            "error": 422,
+            "message": "unprocessable"
         }), 422
 
     @app.errorhandler(400)
     def bad_request(error):
         return jsonify({
-        "success": False, 
-        "error": 400,
-        "message": "bad request"
+            "success": False,
+            "error": error,
+            "message": "bad request"
         }), 400
     return app

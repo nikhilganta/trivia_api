@@ -42,3 +42,201 @@ The `./frontend` directory contains a complete React frontend to consume the dat
 Pay special attention to what data the frontend is expecting from each API response to help guide how you format your API. 
 
 [View the README.md within ./frontend for more details.](./frontend/README.md)
+
+## API Reference
+
+### Getting Started
+
+- Base URL: At present the app can only be run locally and is not hosted as a base URL. The backend app is hosted as the default, `http://127.0.0.1:5000/`, which is set as a proxy in the frontend configuration. 
+- Authentication: This version of the application does not require authentication or API keys.
+
+### Error Handling
+Errors are returned as JSON objects in the following format:
+```
+{
+    "success": False, 
+    "error": 400,
+    "message": "bad request"
+}
+```
+The API will return three error types when requests fail:
+- 400: Bad Request
+- 404: Resource Not Found
+- 422: Not Processable 
+
+### Endpoints 
+
+#### GET /categories
+
+- General: Return a list of categories, success value
+- Sample: `curl -X GET localhost:5000/categories`
+
+```
+{
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "success": true
+}
+```
+
+#### GET /questions
+
+- General:
+    - Return a list of questions, success value, total number of questions and categories
+    - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
+- Sample: `curl -X GET localhost:5000/questions`
+    
+```
+{
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "questions": [
+    {
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4,
+      "id": 2,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    },
+    {
+      "answer": "Tom Cruise",
+      "category": 5,
+      "difficulty": 4,
+      "id": 4,
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    },
+    {
+      "answer": "Maya Angelou",
+      "category": 4,
+      "difficulty": 2,
+      "id": 5,
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    },
+    {
+      "answer": "Edward Scissorhands",
+      "category": 5,
+      "difficulty": 3,
+      "id": 6,
+      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+    },
+    {
+      "answer": "Muhammad Ali",
+      "category": 4,
+      "difficulty": 1,
+      "id": 9,
+      "question": "What boxer's original name is Cassius Clay?"
+    },
+    {
+      "answer": "Brazil",
+      "category": 6,
+      "difficulty": 3,
+      "id": 10,
+      "question": "Which is the only team to play in every soccer World Cup tournament?"
+    },
+    {
+      "answer": "Uruguay",
+      "category": 6,
+      "difficulty": 4,
+      "id": 11,
+      "question": "Which country won the first ever soccer World Cup in 1930?"
+    },
+    {
+      "answer": "George Washington Carver",
+      "category": 4,
+      "difficulty": 2,
+      "id": 12,
+      "question": "Who invented Peanut Butter?"
+    },
+    {
+      "answer": "Lake Victoria",
+      "category": 3,
+      "difficulty": 2,
+      "id": 13,
+      "question": "What is the largest lake in Africa?"
+    },
+    {
+      "answer": "The Palace of Versailles",
+      "category": 3,
+      "difficulty": 3,
+      "id": 14,
+      "question": "In which royal palace would you find the Hall of Mirrors?"
+    }
+  ],
+  "success": true,
+  "total_questions": 20
+}
+```
+
+### DELETE /questions/{question_id}
+- General:
+    - Deletes the question of the given ID if it exists. Returns the success value
+- Sample: `curl -X DELETE localhost:5000/questions/14`
+
+```
+{
+  "message": "Deletion was Successful!",
+  "success": true
+}
+```
+
+### POST /questions
+- General:
+    - Creates a new question using the submitted question, answer, category, and difficulty. Returns the success value and a message stating that the insertion was successful.
+    - Searches for questions containing the submitted search term. Returns the success value, questions and the number of questions. The questions from the search are paginated.
+- Sample:
+    - `curl -X POST -H "Content-Type:application/json" -d '{"question":"What is the name of the trivia developer?","answer":"Nikhil Ganta","category":2,"difficulty":2}' http://127.0.0.1:5000/questions`
+    - `curl -X POST -H "Content-Type:application/json" -d '{"searchTerm":"Tom Hanks"}' http://127.0.0.1:5000/questions`
+
+### GET /categories/\<int:category_id>/questions
+- General:
+    - Return the success values, list of questions with the query parameter of category_id and the total number of questions
+- Sample: `curl -X GET http://127.0.0.1:5000/categories/1/questions`
+```
+{
+  "questions": [
+    {
+      "answer": "The Liver",
+      "category": 1,
+      "difficulty": 4,
+      "id": 20,
+      "question": "What is the heaviest organ in the human body?"
+    },
+    {
+      "answer": "Alexander Fleming",
+      "category": 1,
+      "difficulty": 3,
+      "id": 21,
+      "question": "Who discovered penicillin?"
+    },
+    {
+      "answer": "Blood",
+      "category": 1,
+      "difficulty": 4,
+      "id": 22,
+      "question": "Hematology is a branch of medicine involving the study of what?"
+    }
+  ],
+  "success": true,
+  "total_questions": 3
+}
+```
+
+### POST /quizzes
+- General:
+    - Takes the category and previous questions. Return a random question without repitition
+- Sample: `curl -X POST -H "Content-Type: application/json" -d '{"previous_questions": [10], "quiz_category": {"type": "Sports", "id": "6"}}' http://127.0.0.1:5000/quizzes`
+
+
+
