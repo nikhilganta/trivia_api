@@ -142,8 +142,6 @@ def create_app(test_config=None):
             selection = Question.query.order_by(Question.id).\
                 filter(Question.question.ilike('%{}%'.format(search))).all()
             current_questions = paginate_questions(request, selection)
-            if len(current_questions) == 0:
-                abort(422)
             return jsonify({
                 'success': True,
                 'questions': current_questions,
