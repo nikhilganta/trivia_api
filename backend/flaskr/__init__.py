@@ -113,7 +113,8 @@ def create_app(test_config=None):
             question.delete()
             return jsonify({
                 'success': True,
-                'message': "Deletion was Successful!"
+                'message': "Deletion was Successful!",
+                'id': qid
             }), 200
         except:
             abort(422)
@@ -141,6 +142,8 @@ def create_app(test_config=None):
             selection = Question.query.order_by(Question.id).\
                 filter(Question.question.ilike('%{}%'.format(search))).all()
             current_questions = paginate_questions(request, selection)
+            if len(current_questions) == 0:
+                abort(422)
             return jsonify({
                 'success': True,
                 'questions': current_questions,
@@ -158,7 +161,8 @@ def create_app(test_config=None):
                 question.insert()
                 return jsonify({
                     'success': True,
-                    'message': "Insertion was Successful!"
+                    'message': "Insertion was Successful!",
+                    "id": question.id
                 }), 200
             except:
                 abort(422)
@@ -183,6 +187,9 @@ def create_app(test_config=None):
     '''
     @app.route('/categories/<int:cid>/questions')
     def get_questions_based_on_category(cid):
+        category = Category.query.filter_by(id=cid).one_or_none()
+        if category is None:
+            abort(400)
         selection = Question.query.filter_by(category=cid).all()
         current_questions = paginate_questions(request, selection)
         return jsonify({
