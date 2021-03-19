@@ -2,7 +2,7 @@
 
 ## Introduction
 
-A web application where users can perform CRUD operations on the questions and play the game to test their knowledge based on some pre-defined categories. The application can perform all the below actions:
+A web application where users can play a game (quiz) to test their knowledge based on some pre-defined categories by answering various questions from the database. The application can perform all the below actions:
 
 1) Display questions - both all questions and by category. Questions show the question, category and difficulty rating by default and can show/hide the answer. 
 2) Delete questions.
